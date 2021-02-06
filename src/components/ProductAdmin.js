@@ -15,13 +15,22 @@ export default class ProductAdmin extends Component {
   handleAddProduct = async (product, event) => {
     event.preventDefault();
     // add call to AWS API Gateway add product endpoint here
+    let axiosConfig = {
+      headers: {
+        "x-api-key": config.api.key,
+      },
+    };
 
     try {
       const params = {
         product: product,
         productname: this.newproduct.productname,
       };
-      await axios.post(`${config.api.invokeUrl}/products/{product}`, params);
+      await axios.post(
+        `${config.api.invokeUrl}/products/{product}`,
+        params,
+        axiosConfig
+      );
       this.setState({
         products: [...this.state.products, this.state.newproduct],
       });
