@@ -27,7 +27,7 @@ export default class Products extends Component {
       <div>
         <section className="section">
           <div className="container">
-            <h1>Energy Products</h1>
+            <h1>School Manager</h1>
             <p className="subtitle is-5">
               Invest in a clean future with our efficient and cost-effective
               green energy products:
