@@ -1,14 +1,17 @@
-import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import './App.css';
-import Navbar from './components/Navbar';
-import Home from './components/Home';
-import Products from './components/Products';
-import ProductAdmin from './components/ProductAdmin';
-import Footer from './components/Footer';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import React, { Component } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import "./App.css";
+import Navbar from "./components/Navbar";
+import Home from "./components/Home";
+import Products from "./components/Products";
+import ProductAdmin from "./components/ProductAdmin";
+import Footer from "./components/Footer";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+const config = require("./config.json");
 library.add(faEdit);
+axios.defaults.headers.common["x-api-key"] = config.api.key;
 
 class App extends Component {
   render() {

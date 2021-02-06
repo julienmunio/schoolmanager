@@ -10,16 +10,7 @@ export default class Products extends Component {
 
   fetchProducts = async () => {
     try {
-      let axiosConfig = {
-        headers: {
-          "x-api-key": config.api.key,
-        },
-      };
-
-      const res = await axios.get(
-        `${config.api.invokeUrl}/products`,
-        axiosConfig
-      );
+      const res = await axios.get(`${config.api.invokeUrl}/products`);
       this.setState({ products: res.data });
       console.log(this.state);
     } catch (err) {
