@@ -1,5 +1,6 @@
 {
   "api": {
-    "invokeUrl": "https://myendpoint/stage"
+    "invokeUrl": "https://myendpoint/stage",
+    "key": "sample"
   }
 }

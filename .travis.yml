@@ -1,3 +1,8 @@
 language: node_js
 node_js:
   - 12
+install:
+  - yarn --frozen-lockfile
+  - yarn test
+  - mv src/config_sample.json src/config.json
+  - react-scripts test
