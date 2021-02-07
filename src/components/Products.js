@@ -1,4 +1,4 @@
-import React, { Component, Fragment, useState } from "react";
+import React, { Component } from "react";
 import Product from "./Product";
 import axios from "axios";
 const config = require("../config.json");

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default class ProductAdmin extends Component {
+export default class Product extends Component {
   state = {
     isEditMode: false,
     updatedproductname: this.props.name,
