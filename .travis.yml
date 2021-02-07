@@ -1,5 +1,10 @@
 language: node_js
 node_js:
   - 12
+addons:
+sonarcloud:
+  organization: "julienmunio" # the key of the org you chose at step #3
+  token:
+    secure: "t97JuXFaqZ8feJ1haIFWOnQ0FnCMh+VBJ9eBZjBm2r/vPW18AIM+d/xd0zHKt0nrtnD0x4/bNbPpnCMYpHf/nfIIRSI7lckK8ZghDms87MUhsk1Eh9Bo1g5YoMGr6xyGfPKy4oOmecH2lub/aDF9PYaUpQkEDZRNVBF8vVcjGTCkP905eXUnYrIFeZ3AN1dUSnHaO6TopyZs7Dx1SSuCPvRthydtl1m/v72UE3vqOGtmqcLYr2ir6OpP+vNsJs9MuNM3rJVsNwC15XnwNYDuhsSR69j+f3YGOsJ2IosPz0EbKzlZJfsKlLzkNDVlCiitt0MHVsCF4i2DAtmJSGXBa3CErSywGRM5c5Tvib84Nfc6HmKgc37wc9Ojb6BDMv9Bep989sDuaevobINT8UBr01kbB9NG0+L2pw4L9daIjiXUuTstUNEJTFPl48JbnjPCuhhivSfOtMCNP6L5gEDpA/B3Yd5nyomN1zpdTm5lsYKwhRWkfgKewit4zwAodZvsjL00GycduoRgX+ehC5+VvA2yOjwj5m1tk/WyQ07xSuZ3N6PC93ebCANVPEYn5AqSgevhqh1rFrI1z4Mfq+Nks29U3D/ks5qdrVM97r4Pa6+6bzRNkKzLl4KUIbe2CsFRCxFu5mq70Kklcsfoc0Ku+dlDmrIIRR2C7vWI8iWtn54="
 before install:
   - mv src/config_sample.json src/config.json
