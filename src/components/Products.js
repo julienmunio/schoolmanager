@@ -28,17 +28,14 @@ export default class Products extends Component {
         <section className="section">
           <div className="container">
             <h1>School Manager</h1>
-            <p className="subtitle is-5">
-              Invest in a clean future with our efficient and cost-effective
-              green energy products:
-            </p>
+            <p className="subtitle is-5">Best for you</p>
             <br />
             <select>
               <option value="product">product</option>
               <option value="productname">productname</option>
               <option value="fullname">fullname</option>
             </select>
-            <h1>" "</h1>
+            <h1></h1>
             <br />
             <div className="columns">
               <div className="column">
