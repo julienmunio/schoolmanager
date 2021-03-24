@@ -106,3 +106,9 @@ dist
 src/config.json
 .DS_Store
 HELP.md
+
+# pictures
+public/media/
+
+# data directory
+src/Helpers/

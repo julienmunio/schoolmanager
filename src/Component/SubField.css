@@ -1,0 +1,26 @@
+/* ul {
+  display: flex;
+} */
+
+/* .skillResult {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin: 0;
+} */
+
+.skill {
+  display: flex;
+  margin: 0 10px 0 0;
+}
+
+li.lead {
+  display: flex;
+  /* width: 350px; */
+  font-size: 14px !important;
+  line-height:1 !important;
+}
+
+span{
+  margin-left: 0.5rem;
+}

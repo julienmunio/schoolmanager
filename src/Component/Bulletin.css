@@ -1,0 +1,28 @@
+.header-info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.header {
+  border: 1px solid;
+  margin-bottom: 30px;
+  padding: 20px 0;
+  text-align: center;
+
+  justify-content: center;
+}
+
+.header-info h3 {
+  font-size: 14px;
+}
+
+.field-title {
+  text-align: center;
+  margin: 30px;
+}
+
+h1.title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}

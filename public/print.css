@@ -1,0 +1,56 @@
+header,
+footer,
+aside,
+nav,
+form,
+iframe,
+.menu,
+.hero,
+.adslot {
+  display: none;
+}
+
+@page {
+  margin: 20mm 15mm 20mm 15mm;
+}
+
+@media print {
+  body{
+      width: 21cm;
+      height: 29.7cm;
+      color: black;
+      background-color: #fff;
+      font-size: 14px;
+ } 
+ .competence{
+   width: 12cm !important;
+   line-height: 1.3;
+ }
+ .validation{
+  width: 6cm !important;
+  line-height: 1.3;
+}
+}
+
+div.bulletin,
+.footer,
+.subfield,
+.field {
+  break-inside: avoid;
+}
+
+
+.title-footer{
+  margin-top: 60px;
+}
+
+.teacherComment{
+  height: 180px;
+  width: 100%;
+  border: 1px solid;
+}
+
+ul,
+li {
+  line-height:1.6;
+}

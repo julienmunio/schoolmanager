@@ -1,0 +1,28 @@
+.subfield {
+  font-size: 20px;
+  margin: 10px;
+  margin-left: 30px;
+}
+.subfield-title {
+  text-decoration: underline;
+  text-align: left;
+  /* align-self: start; */
+}
+.flexbox{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.child{
+  height: 150px;
+  width: 150px;
+  margin-right: 30px;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
