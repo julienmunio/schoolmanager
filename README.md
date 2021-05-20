@@ -9,12 +9,8 @@ Setup the analtics infractucture.
 The API corresponds to the infrastructure components: Lambda, API Gateway, S3,... 
 These components are managed by `terraform`.
 
-- Terraform 0.14+
+- Terraform 0.15+
 - NodeJS 14+
-- Write access to bucket `bemyapp-terraform` on AWS account `249124023636`
-- Full access to traget AWS account:
-- - `077292163318`: Dev account
-- - `753517461178`: Prod account
 
 ## Create Lambda layers
 
@@ -22,7 +18,7 @@ Only once, for each target AWS account (dev and production), create the Lambda l
 These layers need to to be created only one time, and are managed in separated terraform states.
 
 ``` bash
-git clone https://github.com/BeMyAppTech/idt-scripts-aws-analytics
+git clone 
 cd layers
 for ENV in "dev" "prod"; do
     for LAYER in "mongodb" "nodejs" "nodejs_axios"; do
@@ -38,7 +34,6 @@ done
 ## Create the main infrastructure
 
 ``` bash
-git clone https://github.com/BeMyAppTech/idt-scripts-aws-analytics
 cd api
 
 # Target environment to create/update
@@ -46,7 +41,6 @@ ENV="dev"
 
 # Initialize backend
 terraform init -backend-config="backend-$ENV.tfvars"
-echo "State will be in: s3://bemyapp-terraform/$ENV/main.tfstate"
 
 # (Optionl) Terraform validation to check for syntax errors
 terraform validate
@@ -62,10 +56,6 @@ Apply complete! Resources: 0 added, 1 changed, 0 destroyed.
 
 Outputs:
 
-api_gateway = "https://v1g4xjo2gh.execute-api.eu-west-1.amazonaws.com/dev/"
-api_gateway_curl_metrics = "curl -X GET https://v1g4xjo2gh.execute-api.eu-west-1.amazonaws.com/dev/api/metric -H \"x-api-key:---\""
-api_gateway_key = "---"
-website = "https://dev.analytic.bemyappcloud.com/"
 ```
 
 Note the CURL output you can use to check the API results.
@@ -96,23 +86,19 @@ For multiple entries, the amount of data of each metric may differs. Depending o
 Directly using API Gateway with the required API key as outputed by the Terraform command.
 
 ``` bash
-curl -X GET -v "https://v1g4xjo2gh.execute-api.eu-west-1.amazonaws.com/dev/api/metric" -H "x-api-key:---"
 ```
 
 Calling API Gateway via Cloudfront. No API is required since the Cloudfront distribution is protected by a WAF with IP protection.
 
 ``` bash
-curl -X GET -v "https://dev.analytic.bemyappcloud.com/api/metric"
 ```
 
 Single metric data:
 ``` bash
-curl -X GET -v "https://dev.analytic.bemyappcloud.com/api/metric?event=ideation-code-love-hack&metric=Accounts"
 ```
 
 Multiple metrics data:
 ``` bash
-curl -X GET -v "https://dev.analytic.bemyappcloud.com/api/metric?event=ideation-code-love-hack&metric=Room%20Size&metric=Accounts"
 ```
 
 Multiple metrics data sample with `aggregation` options:
@@ -125,7 +111,6 @@ START=$(echo "$START"|sed 's/ /%20/g')
 END=$(echo "$END"|sed 's/ /%20/g')
 AGG1="Average"
 AGG2="Sum"
-curl -X GET -v "https://dev.analytic.bemyappcloud.com/api/metric?event=$EVENT&metric=Room%20Size&metric=Accounts&start=$START&end=$END&agg=$AGG1&agg2=$AGG2&period=$PERIOD"
 ```
 
 Sample data:
@@ -165,7 +150,6 @@ Sample data:
     ]
 }
 ```
-
 #### Multi-dimension metrics
 
 Multiple dimensions metrics are metrics having a sub category.
@@ -173,7 +157,6 @@ For sample, the metric `Tags` has the dimensions `event` and the `tag` name itse
 
 Sample:
 ``` bash
-curl -X GET -v "https://dev.analytic.bemyappcloud.com/api/metric?event=ideation-code-love-hack&metric=Tags&metric=Accounts&period=day"
 ```
 
 ``` json
@@ -219,7 +202,6 @@ Several metrics related to a single event can be publiched with a single API cal
 
 Sample
 ``` bash
-curl -X POST -v "https://dev.analytic.bemyappcloud.com/api/metric" \
     -H "content-type:application/json" \
     -d '{
             "event" : "ideation-code-love-hack",
@@ -238,254 +220,17 @@ Return details of all active events. An active event is an evant with `stop` dat
 This list is continuously updated (every 12 hours) by a backend process looking for new databases in the MongoDB server. See the NodeJS code of `lambda-track_events.js`for more information.
 
 ``` bash
-curl -X GET -v "https://dev.analytic.bemyappcloud.com/api/event"
 ```
 Sample data:
 
 ```json
 [
-    {"id":"ideation-calibre-regression","title":"BeMyApp","labels":["Business","Education","Healthcare"],"start":"2021-02-25T10:33:46.000Z","stop":"2021-03-27T10:33:46.000Z"},
     {"id":"ideation-instep","title":"Infosys InStep Internship Program","start":"2020-07-01T00:00:00.000Z","stop":"2021-07-07T00:00:00.000Z"}
 ]
 ```
 
 Note : `labels` and `start` attributes may not be available.
 
-## Kinesis / Firehose
-
-### Agent setup
-
-``` bash
-ssh ec2-user@52.208.130.76
-sudo -i
-yum install –y aws-kinesis-agent
-
-WATCH_CONF='/etc/aws-kinesis/agent.json'
-WATCH_LOG="/var/log/kinesis-watch.log"
-
-KINESIS_STREAM="bemyapp-analytics-dev"
-KINESIS_ENDPOINT="kinesis.eu-west-1.amazonaws.com"
-FIREHOSE_STREAM="bemyapp-analytics-dev"
-FIREHOSE_ENDPOINT="firehose.eu-west-1.amazonaws.com"
-
-cat $WATCH_CONF
-touch "$WATCH_LOG"
-# awsAccessKeyId
-# awsSecretAccessKey
-echo '{
-  "cloudwatch.emitMetrics": true,
-  "kinesis.endpoint": "'$KINESIS_ENDPOINT'",
-  "firehose.endpoint": "'$FIREHOSE_ENDPOINT'",
-  "flows": [
-    {
-      "filePattern": "'$WATCH_LOG'",
-      "deliveryStream": "'$FIREHOSE_STREAM'",
-      "dataProcessingOptions": [
-        {
-            "optionName": "LOGTOJSON",
-            "logFormat": "COMMONAPACHELOG",
-            "matchPattern": "^METRIC\\s+\\[([^]]+)\\]\\s+(\\S+)\\s+(\\S+)\\s+(\\S+)\\s+(.*)",
-            "customFieldNames": [ "date", "event", "metric", "value","message" ]
-        }
-      ]
-    }
-  ]
-}' > $WATCH_CONF
-
-# Both Firehose and Kinesis Data streams
-#echo '{
-#  "cloudwatch.emitMetrics": true,
-#  "kinesis.endpoint": "'$KINESIS_ENDPOINT'",
-#  "firehose.endpoint": "'$FIREHOSE_ENDPOINT'",
-#  "flows": [
-#    {
-#      "filePattern": "'$WATCH_LOG'",
-#      "kinesisStream": "'$KINESIS_STREAM'"
-#    },{
-#      "filePattern": "'$WATCH_LOG'",
-#      "deliveryStream": "'$FIREHOSE_STREAM'"
-#    }
-#  ]
-#}' > $WATCH_CONF
-
-chkconfig aws-kinesis-agent on
-service aws-kinesis-agent restart
-#service aws-kinesis-agent stop
-#service aws-kinesis-agent start
-
-EVENT='ideation-code-love-hack'
-METRIC='Messages'
-
-echo "METRIC [2021-03-27 17:22:23] ${EVENT} ${METRIC} 50 ${METRIC}\tFROM KINESIS AGENT v7" >> $WATCH_LOG
-echo "METRIC [2021-03-18 09:1:23] ${EVENT} ${METRIC} 1 ${METRIC}\tFROM KINESIS AGENT v8" >> $WATCH_LOG
-tail -f /var/log/aws-kinesis-agent/aws-kinesis-agent.log
-```
-
-### Put records from nodeJS
-
-Ses code sample in `firehose-sample/index.js`. 
-Sample NodeJS:
-```javascript
-const AWS = require('aws-sdk');
-const KINESIS_STREAM = "bemyapp-analytics-dev";
-const EVENT = 'ideation-code-love-hack';
-const METRIC = 'Messages';
-
-AWS.config.update({
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
-AWS.config.apiVersions = {
-    firehose: '2015-08-04',
-    region: process.env.AWS_REGION
-};
-const firehose = new AWS.Firehose();
-
-let params = {
-    Record: {
-        //Data: `${EVENT};${METRIC};1;${METRIC}\tFROM LAMBDA PROXY`,
-        Data: JSON.stringify({
-            event: EVENT,
-            metric: METRIC,
-            value: value,
-            date: new Date(),
-        })
-    },
-    DeliveryStreamName: KINESIS_STREAM
-};
-firehose.putRecord(params, function (err) {
-    if (err) {
-        console.error("couldn't stream", err.stack);
-    } else {
-        console.log("INFO - successfully send stream");
-    }
-});
-
-```
-
-## API request Athena report
-
-Requesting an export of the whole analytics table. Note that requesting a report from Athena is an asynchronous operation. The API result is only an execution query identifier: `QueryExecutionId`. This identifier can be used to download the actual report file when available, and can also be used to track the status of the execution.
-
-A repport requires up to 15 minutes to be completed.
-
-### API Request Athena with a specific query
-
-``` bash
-RESULT_ID="$(curl -X GET -v "https://dev.analytic.bemyappcloud.com/api/athena" | jq -r '.QueryExecutionId')"
-# {"QueryExecutionId":"3f85cd01-7b10-4e69-a14a-c50f7786eb76"}
-
-curl -X GET -v "https://dev.analytic.bemyappcloud.com/exports/$RESULT_ID.csv"
-```
-
-By default, without the query attribute, the executed query is `SELECT * FROM bemyapp-analytics-dev.bemyapp-analytics-dev-datalake;`.
-The following sample code overrides this behavior:
-``` bash
-RESULT_ID="$(curl -X GET -v "https://dev.analytic.bemyappcloud.com/api/athena?query=SELECT%20DISTINCT%20event%20%20FROM%20%22bemyapp-analytics-dev%22.%22bemyapp-analytics-dev-datalake%22%3B" \
-  | jq -r '.QueryExecutionId')"
-curl -X GET -v "https://dev.analytic.bemyappcloud.com/exports/$RESULT_ID.csv"
-```
-
-`POST` method is also accepted:
-``` bash
-RESULT_ID="$(curl -X POST -v "https://dev.analytic.bemyappcloud.com/api/athena" \
-  -H "content-type:application/json" \
-  -d '{
-        "query" : "SELECT DISTINCT event FROM \"bemyapp-analytics-dev\".\"bemyapp-analytics-dev-datalake\";"
-      }'\
-  | jq -r '.QueryExecutionId')"
-curl -X POST -v "https://dev.analytic.bemyappcloud.com/exports/$RESULT_ID.csv"
-```
-
-### API Request Athena with a named query
-
-Using a named query simplifies the API usage by providing a logic name instead of a full SQL query.
-
-The saved Athena queries are the ones defined there : https://eu-west-1.console.aws.amazon.com/athena/saved-queries/home
-Administrators can create their own queries and name them. Currently there is no filter, but a naming convention could be creted to control the exposed Athena queries.
-
-``` bash
-RESULT_ID="$(curl -X GET -v "https://dev.analytic.bemyappcloud.com/api/athena?name=saved-query1" \
-  | jq -r '.QueryExecutionId')"
-curl -X GET -v "https://dev.analytic.bemyappcloud.com/exports/$RESULT_ID.csv"
-```
-
-`POST` method is also accepted:
-``` bash
-RESULT_ID="$(curl -X POST -v "https://dev.analytic.bemyappcloud.com/api/athena" \
-  -H "content-type:application/json" \
-  -d '{
-        "name" : "saved-query1"
-      }'\
-  | jq -r '.QueryExecutionId')"
-curl -X POST -v "https://dev.analytic.bemyappcloud.com/exports/$RESULT_ID.csv"
-```
-
-### Tracking the Athena query result
-
-The returned `QueryExecutionId` can be used to check the status of requested report.
-
-``` bash
-curl -X GET -v "https://dev.analytic.bemyappcloud.com/api/athena?id=4b69f9f4-3834-411a-bcea-b8e3889874c5"
-```
-
-Sample output of an not yet finished export:
-``` json
-{
-    "QueryExecution":{
-        "QueryExecutionId":"4b69f9f4-3834-411a-bcea-b8e3889874c5",
-        "Query":"SELECT DISTINCT event  FROM \"bemyapp-analytics-dev\".\"bemyapp-analytics-dev-datalake\"",
-        "StatementType":"DML",
-        "ResultConfiguration":{
-            "OutputLocation":"s3://bemyapp-analytics-dev-datalake/exports/4b69f9f4-3834-411a-bcea-b8e3889874c5.csv"},
-            "QueryExecutionContext":{
-                "Status":{
-                    "State":"RUNNING",
-                    "SubmissionDateTime":"2021-04-04T10:40:03.468Z"
-                },
-                "Statistics":{
-                    "TotalExecutionTimeInMillis":395,
-                    "QueryQueueTimeInMillis":275
-                }
-                ...
-            }
-        }
-    }
-```
-
-Sample output of afinished export:
-``` json
-{
-    "QueryExecution":{
-        "QueryExecutionId":"4b69f9f4-3834-411a-bcea-b8e3889874c5",
-        "Query":"SELECT DISTINCT event  FROM \"bemyapp-analytics-dev\".\"bemyapp-analytics-dev-datalake\"",
-        "StatementType":"DML",
-        "ResultConfiguration":{
-            "OutputLocation":"s3://bemyapp-analytics-dev-datalake/exports/4b69f9f4-3834-411a-bcea-b8e3889874c5.csv"},
-            "QueryExecutionContext":{
-                "Status":{
-                    "State":"SUCCEEDED",
-                    "SubmissionDateTime":"2021-04-04T10:25:57.240Z",
-                    "CompletionDateTime":"2021-04-04T10:25:58.185Z"
-                },
-                "Statistics":{
-                        "EngineExecutionTimeInMillis":780,
-                        "DataScannedInBytes":1309,
-                        "TotalExecutionTimeInMillis":945,
-                        "QueryQueueTimeInMillis":113,
-                        "QueryPlanningTimeInMillis":398,
-                        "ServiceProcessingTimeInMillis":52
-                }
-                ...
-            }
-        }
-    }
-```
-
-When the requested export does not exist, the result is a `400` http error code:
-``` json
-{"code":"InvalidRequestException"}
-```
 
 # Website
 
@@ -496,8 +241,8 @@ These components are managed by `terraform`.
 
 - Terraform 0.14+
 - NodeJS 12+
-- Write access to bucket `bemyapp-terraform` on AWS account `249124023636`
-- S3 access, bucket `bemyapp-analytics-dev`or `bemyapp-analytics-prod` depending on the target environment.
+- Write access to bucket `-terraform` on AWS account ``
+- S3 access, bucket `-analytics-dev`or `-analytics-prod` depending on the target environment.
 
 This part covers the setup, test and the deployment of the website.
 The code is deployed to the S3 bucket created in the previous steps by Terraform.
@@ -552,7 +297,7 @@ BillboardJS: https://naver.github.io/billboard.js/demo/#API.AxisRange
 ## Deployment
 
 This task builds the website, deploys it to S3 and invalidates the Cloudfront cache.
-This task requires an AWS profile such as `bemyapp-dev` having the right access to S3 and Cloudfront.
+This task requires an AWS profile such as `-dev` having the right access to S3 and Cloudfront.
 
 ```
 gulp deploy
