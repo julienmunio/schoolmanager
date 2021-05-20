@@ -1,5 +1,5 @@
 import "./App.css";
-import Bulletin from "./Component/Bulletin";
+import Bulletin from "./components/Bulletin";
 
 function App() {
   return (
