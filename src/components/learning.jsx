@@ -1,7 +1,7 @@
 // test not use
 import React, { Component } from "react";
 
-export default class learning extends Component {
+export default class Learning extends Component {
   render() {
     return <div></div>;
   }

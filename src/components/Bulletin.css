@@ -1,3 +1,8 @@
+.bulletin {
+  position: absolute;
+  left: 25%;
+}
+
 .header-info {
   display: flex;
   flex-direction: row;

@@ -41,9 +41,6 @@ DATA.forEach(e => {
 console.log('newData');
 console.log(newData);
 
-// *****
-// Starting point
-// *****
 export default function Bulletin() {
   
   const listFieldsName = newData.fields.map((d) => (

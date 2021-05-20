@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import './Navbar.css';
 
 export default class Navbar extends Component {
   render() {
@@ -16,7 +17,7 @@ export default class Navbar extends Component {
           </a>
         </div>
 
-        <div id="navbarBasicExample" className="navbar-menu">
+        <div id="navbarBasic" className="navbar-menu">
           <div className="navbar-start">
             <a href="/" className="navbar-item">
               Home
@@ -32,10 +33,10 @@ export default class Navbar extends Component {
           <div className="navbar-end">
             <div className="navbar-item">
               <div className="buttons">
-                <a href="/register" className="button is-primary">
+                <a href="/register" className="button">
                   <strong>Sign up</strong>
                 </a>
-                <a href="/login" className="button is-light">
+                <a href="/login" className="button">
                   Log in
                 </a>
               </div>
