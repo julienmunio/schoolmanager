@@ -1,6 +1,7 @@
 .bulletin {
   position: absolute;
   left: 25%;
+  padding-top: 30px;
 }
 
 .header-info {

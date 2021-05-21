@@ -21,7 +21,10 @@ iframe,
       color: black;
       background-color: #fff;
       font-size: 14px;
- } 
+ }
+ .bulletin{
+   margin-top: 0;
+ }
  .competence{
    width: 12cm !important;
    line-height: 1.3;
