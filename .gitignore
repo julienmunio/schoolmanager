@@ -112,3 +112,6 @@ public/media/
 
 # data directory
 src/Helpers/
+
+# Terraform Layers
+layers
