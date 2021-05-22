@@ -1,3 +1,38 @@
+# Julien
+cd api
+
+terraforn init
+    Enter a value
+    S3 bucket
+
+    Correction :
+        provider.tf
+
+backend "s3" {
+    bucket  = "tf-julien-munio"
+    key     = "dev/schoolmanager.tfstate"
+    region  = "eu-west-1"
+    profile = "schoolmanager-tf-dev"
+}
+
+terraform plan
+    Enter a value
+    var.client
+
+
+## Target environment to create/update
+ENV="dev"
+
+## Initialize backend
+terraform init -backend-config="backend-${ENV:-dev}.tfvars"
+echo "State will be in: s3://bemyapp-terraform/${ENV:-dev}/main.tfstate"
+
+## (Optionl) Terraform validation to check for syntax errors
+terraform validate
+
+## Update the infrastructure
+terraform apply -auto-approve -var-file="main-${ENV:-dev}.tfvars"
+
 # Introduction
 
 Setup the analtics infractucture.

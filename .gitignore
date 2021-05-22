@@ -113,5 +113,7 @@ public/media/
 # data directory
 src/Helpers/
 
-# Terraform Layers
+# Terraform
 layers
+api/.terraform
+api/.terraform.lock.hcl
