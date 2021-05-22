@@ -19,6 +19,8 @@ terraform plan
     Enter a value
     var.client
 
+terraform init -backend-config="backend-dev.tfvars"
+
 
 ## Target environment to create/update
 ENV="dev"

@@ -1,7 +1,7 @@
 project     = "schoolmanager"
 client      = "perso"
 region      = "eu-west-1"
-profile = "schoolmanager-tf-dev"
+profile     = "schoolmanager-tf-dev"
 environment = "DEV"
 #collect_schedule_cron="cron(0 8 ? * MON-FRI *)"
 #collect_schedule_cron="rate(1 minute)"
