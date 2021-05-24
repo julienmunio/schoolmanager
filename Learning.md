@@ -27,4 +27,8 @@ key     = "PREFIX/FILE NAME.tfstate"
 region  = "REGION"
 profile = "AWS CREDENTIAL NAME"
 
-## change name
+## change name layer
+
+  cd "LAYER NAME"
+  terraform init -backend-config=backend-dev.tfvars
+  terraform apply -auto-approve -var-file="main-dev.tfvars"
