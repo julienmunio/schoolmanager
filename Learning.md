@@ -30,5 +30,15 @@ profile = "AWS CREDENTIAL NAME"
 ## change name layer
 
   cd "LAYER NAME"
-  terraform init -backend-config=backend-dev.tfvars
-  terraform apply -auto-approve -var-file="main-dev.tfvars"
+  terraform init -backend-config="backend-${ENV:-dev}.tfvars"
+  terraform apply -auto-approve -var-file="main-${ENV:-dev}.tfvars"
+
+  check folder structure to execute npm install command
+
+# Main structure
+
+  cd ~/PROJECT FOLDER/API
+  terraform init -backend-config="backend-${ENV:-dev}.tfvars"
+  terraform apply -auto-approve -var-file="main-${ENV:-dev}.tfvars"
+
+

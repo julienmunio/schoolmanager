@@ -1,3 +1,11 @@
+data "archive_file" "lambda_students-list_zip" {
+  type        = "zip"
+  output_path = ".tmp/lambda-students-list.zip"
+  source {
+    content  = file("./lambda-students-list.js")
+    filename = "index.js"
+  }
+}
 resource "aws_lambda_function" "students-list" {
   function_name    = "${lower(var.project)}-${lower(var.environment)}-students-list"
   filename         = data.archive_file.lambda_students-list_zip.output_path
@@ -28,15 +36,6 @@ resource "aws_lambda_function" "students-list" {
 #   #source_arn    = "arn:aws:execute-api:${var.region}:${local.account}:${aws_api_gateway_rest_api.main.id}/*/${aws_api_gateway_method.metrics.http_method}${aws_api_gateway_resource.metrics.path}"
 #   source_arn = "arn:aws:execute-api:${var.region}:${local.account}:${aws_api_gateway_rest_api.main.id}/*/*"
 # }
-
-data "archive_file" "lambda_students-list_zip" {
-  type        = "zip"
-  output_path = ".tmp/lambda-students-list.zip"
-  source {
-    content  = file("./lambda-students-list.js")
-    filename = "index.js"
-  }
-}
 
 # IAM
 resource "aws_iam_role" "lambda_students-list" {
