@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "aws-sdk": "^2.879.0",
+    "moment": "2.29.1",
+    "unidecode": "0.1.8"
+  }
+}

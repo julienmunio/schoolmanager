@@ -11,7 +11,6 @@ resource "aws_dynamodb_table" "user" {
     type = "S"
   }
 }
-
 resource "aws_dynamodb_table" "assignment" {
   name             = "${lower(var.project)}-${lower(var.environment)}-assignment"
   hash_key         = "email"
@@ -30,7 +29,6 @@ resource "aws_dynamodb_table" "assignment" {
     type = "S"
   }
 }
-
 resource "aws_dynamodb_table" "school" {
   name             = "${lower(var.project)}-${lower(var.environment)}-school"
   hash_key         = "academy"
@@ -67,7 +65,6 @@ resource "aws_dynamodb_table" "classroom" {
     type = "S"
   }
 }
-
 resource "aws_dynamodb_table" "skills" {
   name             = "${lower(var.project)}-${lower(var.environment)}-skills"
   hash_key         = "classroom"
@@ -86,7 +83,6 @@ resource "aws_dynamodb_table" "skills" {
     type = "S"
   }
 }
-
 resource "aws_dynamodb_table" "assessment" {
   name             = "${lower(var.project)}-${lower(var.environment)}-assessment"
   hash_key         = "id"
@@ -95,7 +91,6 @@ resource "aws_dynamodb_table" "assessment" {
   stream_enabled   = true
   stream_view_type = "NEW_IMAGE"
   billing_mode     = "PAY_PER_REQUEST"
-
   attribute {
     name = "id" #classroom, level
     type = "S"

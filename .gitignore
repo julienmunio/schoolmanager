@@ -64,6 +64,7 @@ typings/
 
 # Output of 'npm pack'
 *.tgz
+*.zip
 
 # Yarn Integrity file
 .yarn-integrity
@@ -114,6 +115,12 @@ public/media/
 src/Helpers/
 
 # Terraform
-layers
 api/.terraform
 api/.terraform.lock.hcl
+archive/
+.terraform/
+.tmp/
+
+# yarn
+yarn.lock
+*lock*
