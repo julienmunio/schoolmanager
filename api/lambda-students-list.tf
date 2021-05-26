@@ -14,14 +14,13 @@ resource "aws_lambda_function" "students-list" {
   handler          = "index.handler"
   runtime          = "nodejs14.x"
   layers = [
-    "${data.aws_lambda_layer_version.nodejs.layer_arn}:${data.aws_lambda_layer_version.nodejs.version}"
+    "${data.aws_lambda_layer_version.nodejs_axios.layer_arn}:${data.aws_lambda_layer_version.nodejs_axios.version}"
   ]
   timeout = 5
 
   environment {
     variables = {
       REGION    = var.region
-      TABLE     = aws_dynamodb_table.profiles.name
       NAMESPACE = var.cloudwatch_namespace
     }
   }
@@ -73,9 +72,7 @@ resource "aws_iam_policy" "lambda_students-list" {
       ],
       "Resource": [
           "${aws_cloudwatch_log_group.lambda_students-list.arn}",
-          "${aws_cloudwatch_log_group.lambda_students-list.arn}:*",
-          "${aws_dynamodb_table.profiles.arn}",
-          "${aws_dynamodb_table.profiles.arn}/*"
+          "${aws_cloudwatch_log_group.lambda_students-list.arn}:*"
       ]
     },
     {
@@ -92,6 +89,9 @@ resource "aws_iam_policy" "lambda_students-list" {
 }
 EOF
 }
+
+          # "${aws_dynamodb_table.profiles.arn}",
+          # "${aws_dynamodb_table.profiles.arn}/*"
 
 resource "aws_iam_role_policy_attachment" "lambda_students-list" {
   role       = aws_iam_role.lambda_students-list.name
