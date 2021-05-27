@@ -83,7 +83,7 @@ exports.handler = async (req, context) => {
 
     // Window
     let start = toDate(req.queryStringParameters.start) || new Date(new Date().getTime() - DEFAULT_WINDOW);
-    let end = toDate(req.queryStringParameters.end) || new Date;
+    let end = toDate(req.queryStringParameters.end) || new Date();
     if (start >= end) {
         return error({ code: 'invalid-start', message: 'The parameter "end" must be greater than "start"' });
     }
@@ -183,7 +183,7 @@ async function getMetricData(cloudwatch, eventId, metrics, start, end, periodLen
                                 Name: 'Event',
                                 Value: eventId
                             },
-                            ... (m.dimensions || [])
+                            ...(m.dimensions || [])
                         ],
                         MetricName: m.name,
                         Namespace: NAMESPACE
