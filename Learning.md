@@ -85,3 +85,11 @@ profile = "AWS CREDENTIAL NAME"
 │ 
 │ A managed resource "aws_dynamodb_table" "profiles" has not been declared in the root module.
 ╵
+
+
+## Add access to DB
+
+          "${aws_dynamodb_table.classroom.arn}",
+          "${aws_dynamodb_table.classroom.arn}/*"
+
+      classroom is table name

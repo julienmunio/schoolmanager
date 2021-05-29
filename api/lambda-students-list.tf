@@ -72,8 +72,10 @@ resource "aws_iam_policy" "lambda_students-list" {
       ],
       "Resource": [
           "${aws_cloudwatch_log_group.lambda_students-list.arn}",
-          "${aws_cloudwatch_log_group.lambda_students-list.arn}:*"
-      ]
+          "${aws_cloudwatch_log_group.lambda_students-list.arn}:*",
+          "${aws_dynamodb_table.classroom.arn}",
+          "${aws_dynamodb_table.classroom.arn}/*"
+     ]
     },
     {
       "Effect": "Allow",
@@ -89,10 +91,6 @@ resource "aws_iam_policy" "lambda_students-list" {
 }
 EOF
 }
-
-          # "${aws_dynamodb_table.profiles.arn}",
-          # "${aws_dynamodb_table.profiles.arn}/*"
-
 resource "aws_iam_role_policy_attachment" "lambda_students-list" {
   role       = aws_iam_role.lambda_students-list.name
   policy_arn = aws_iam_policy.lambda_students-list.arn
