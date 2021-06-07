@@ -18,13 +18,7 @@
 }
 
 .header {
-  align-items: center !important;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  align-items: center;
 }
 
 .App-header {
@@ -35,7 +29,7 @@
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: #E1E1E1;
 }
 
 ul {
