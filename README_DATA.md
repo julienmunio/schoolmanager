@@ -1,3 +1,12 @@
+# Todo
+
+API 
+  Choose table
+
+Select2
+  Find it to Analytics project
+
+
 # Data Helpers/data.js
   http://www.convertcsv.com/csv-to-json.htm
 

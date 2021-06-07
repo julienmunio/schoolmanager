@@ -1,5 +1,5 @@
 /*jshint esversion: 6 */
-'use strict';
+// 'use strict';
 const AWS = require('aws-sdk');
 const moment = require('moment');
 const REGION = process.env.REGION;
@@ -14,7 +14,7 @@ const ALIAS_AGGREGATES = {Avg: 'Average', Min: 'Minimum', Max: 'Maximum', Mini: 
 const ALIAS_PERIODS = ['minute', 'hour', 'day', 'week', 'month', 'year'];
 const PERIODS_TO_SECONDS = {minute: 60, hour: 3600, day: 3600 * 24};
 
-/* Multidimension metric have to follow this structure:
+/* Multi dimension metric have to follow this structure:
  * Key is the query parameter name of the metrics. For multi dimension metrics, often the plural form of the actual Cloudwatch dimension name.
  */
 const MULTI_DIM_METRICS = {
