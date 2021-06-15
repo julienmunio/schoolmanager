@@ -12,10 +12,9 @@ Project realized with educational team. They will be the key to the success of t
 
 Full serverless application deploy with awesome [Terraform](https://www.terraform.io/) configuration language.
 
-All data storage will be done in France.
-
 Based on General Data Protection Regulation respect.
 
+All data storage will be done in France.
 ## Authors
 
 SchoolManager is still an Alpha application. Please contact me for complete information about it and how to use it.
