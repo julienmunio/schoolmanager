@@ -10,3 +10,11 @@ Ministry of Education employees.
 Full serverless application deploy with awesome [Terraform](https://www.terraform.io/) configuration language.
 
 Based on General Data Protection Regulation respect.
+
+## Authors
+
+- [@julienmunio](https://www.github.com/julienmunio)
+  
+## Badges
+
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
