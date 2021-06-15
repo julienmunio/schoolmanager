@@ -7,6 +7,6 @@ Ministry of Education employees.
 )
 ## Techno
 
-Full serverless application
+Full serverless application deploy with awesome [Terraform](https://www.terraform.io/) configuration language.
 
-Based on General Data Protection Regulation respect
+Based on General Data Protection Regulation respect.
