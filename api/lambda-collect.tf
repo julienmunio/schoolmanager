@@ -35,8 +35,8 @@ resource "aws_lambda_function" "collect" {
     variables = {
       REGION      = var.region
       TABLE       = aws_dynamodb_table.classroom.name
-      # MONGODB_URI = var.mongo_uri
       NAMESPACE   = var.cloudwatch_namespace
+      IP_ADDRESS   = var.ip_address
     }
   }
 }

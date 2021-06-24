@@ -5,6 +5,10 @@ variable "region" {
 variable "profile" {
   type = string
 }
+variable "ip_address" {
+  type        = string
+  sensitive   = true
+}
 variable "project" {
   type = string
 }
