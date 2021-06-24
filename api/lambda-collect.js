@@ -15,7 +15,7 @@ exports.handler = async (req, context) => {
   debug("New context", JSON.stringify(context, null, 2));
 
   try {
-    if (req.headers["X-Forwarded-For"] == IP_ADDRESS) {
+    if (req.headers["X-Forwarded-For"] === IP_ADDRESS) {
       let eventId = "0211540K";
       let classroom = "a";
       let ddb = new AWS.DynamoDB({ apiVersion: "2012-10-08" });
