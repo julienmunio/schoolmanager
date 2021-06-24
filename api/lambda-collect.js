@@ -4,6 +4,7 @@ const AWS = require("aws-sdk");
 const REGION = process.env.REGION;
 const TABLE = process.env.TABLE;
 const NAMESPACE = process.env.NAMESPACE;
+const IP_ADDRESS = process.env.IP_ADDRESS;
 const LOG_LEVEL = "DEBUG"; // DEBUG, INFO, WARN
 
 /**
@@ -14,7 +15,7 @@ exports.handler = async (req, context) => {
   debug("New context", JSON.stringify(context, null, 2));
 
   try {
-    if (req.headers["X-Forwarded-For"] === "93.25.187.164") {
+    if (req.headers["X-Forwarded-For"] == IP_ADDRESS) {
       let eventId = "0211540K";
       let classroom = "a";
       let ddb = new AWS.DynamoDB({ apiVersion: "2012-10-08" });
