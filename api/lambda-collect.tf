@@ -1,3 +1,13 @@
+# Lambda call from API Gateway
+resource "aws_lambda_permission" "collect" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.collect.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn = "${aws_api_gateway_rest_api.main.execution_arn}/*/*/*"
+  # source_arn    = "arn:aws:execute-api:${var.region}:${local.account}:${aws_api_gateway_rest_api.main.id}/*/*"
+}
+
 data "archive_file" "lambda_collect_zip" {
   type        = "zip"
   output_path = ".tmp/lambda-collect.zip"
@@ -14,12 +24,13 @@ resource "aws_lambda_function" "collect" {
   role             = aws_iam_role.lambda_collect.arn
   handler          = "index.handler"
   runtime          = "nodejs14.x"
-  memory_size      = 128
+  # memory_size      = 1024
   layers = [
     "${data.aws_lambda_layer_version.nodejs.layer_arn}:${data.aws_lambda_layer_version.nodejs.version}",
     "${data.aws_lambda_layer_version.mongodb.layer_arn}:${data.aws_lambda_layer_version.mongodb.version}"
   ]
-  timeout = 300
+  timeout = 10
+
   environment {
     variables = {
       REGION      = var.region
@@ -29,14 +40,6 @@ resource "aws_lambda_function" "collect" {
     }
   }
 }
-resource "aws_lambda_permission" "collect" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.collect.function_name
-  principal     = "apigateway.amazonaws.com"
-  source_arn    = "arn:aws:execute-api:${var.region}:${local.account}:${aws_api_gateway_rest_api.main.id}/*/*"
-}
-
 
 # IAM
 resource "aws_iam_role" "lambda_collect" {
@@ -109,3 +112,13 @@ resource "aws_cloudwatch_log_group" "lambda_collect" {
   tags              = local.tags
   retention_in_days = 30
 }
+
+
+# # Lambda event source permissions from EventBridge and CloudWatchEvent
+# resource "aws_lambda_permission" "collect_from_cloud_watch" {
+#   statement_id  = "AllowExecutionFromCloudWatch"
+#   action        = "lambda:InvokeFunction"
+#   function_name = aws_lambda_function.collect.function_name
+#   principal     = "events.amazonaws.com"
+#   source_arn    = "arn:aws:events:${var.region}:${local.account}:rule/*"
+# }
