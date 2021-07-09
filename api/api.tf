@@ -10,7 +10,7 @@ resource "aws_api_gateway_rest_api" "main" {
   endpoint_configuration {
     types = ["REGIONAL"]
   }
-  # api_key_source = "HEADER"
+  api_key_source = "HEADER"
   # See https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_rest_api
 }
 
@@ -67,9 +67,9 @@ resource "aws_api_gateway_deployment" "main" {
     create_before_destroy = true
   }
   triggers = {
-    redeployment = sha1(join(",", tolist(
-      [jsonencode(aws_api_gateway_integration.events), ]
-    )))
+    redeployment = sha1(join(",", tolist([
+      jsonencode(aws_api_gateway_integration.events),
+    ])))
   }
 }
 
@@ -116,10 +116,10 @@ resource "aws_api_gateway_resource" "events" {
 }
 
 resource "aws_api_gateway_method" "events" {
-  rest_api_id      = aws_api_gateway_rest_api.main.id
-  resource_id      = aws_api_gateway_resource.events.id
-  http_method      = "GET"
-  authorization    = "NONE"
+  rest_api_id   = aws_api_gateway_rest_api.main.id
+  resource_id   = aws_api_gateway_resource.events.id
+  http_method   = "GET"
+  authorization = "NONE"
   # api_key_required = true
 }
 

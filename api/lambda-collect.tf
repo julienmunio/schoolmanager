@@ -4,8 +4,8 @@ resource "aws_lambda_permission" "collect" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.collect.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_api_gateway_rest_api.main.execution_arn}/*/*/*"
-  # source_arn    = "arn:aws:execute-api:${var.region}:${local.account}:${aws_api_gateway_rest_api.main.id}/*/*"
+  # source_arn = "${aws_api_gateway_rest_api.main.execution_arn}/*/*/*"
+  source_arn    = "arn:aws:execute-api:${var.region}:${local.account}:${aws_api_gateway_rest_api.main.id}/*/*"
 }
 
 data "archive_file" "lambda_collect_zip" {
@@ -36,7 +36,7 @@ resource "aws_lambda_function" "collect" {
       REGION      = var.region
       TABLE       = aws_dynamodb_table.classroom.name
       NAMESPACE   = var.cloudwatch_namespace
-      IP_ADDRESS   = var.ip_address
+      # IP_ADDRESS   = var.ip_address
     }
   }
 }
@@ -74,6 +74,7 @@ resource "aws_iam_policy" "lambda_collect" {
         "logs:CreateLogStream",
         "logs:PutLogEvents",
         "dynamodb:GetItem",
+        "dynamodb:BatchGetItem",
         "dynamodb:UpdateItem"
       ],
       "Resource": [

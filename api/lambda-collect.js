@@ -15,25 +15,27 @@ exports.handler = async (req, context) => {
   debug("New context", JSON.stringify(context, null, 2));
 
   try {
-    if (req.headers["X-Forwarded-For"] === IP_ADDRESS) {
+    // if (req.headers["X-Forwarded-For"] === IP_ADDRESS) {
       let eventId = "0211540K";
       let classroom = "a";
-      let ddb = new AWS.DynamoDB({ apiVersion: "2012-10-08" });
-      let studentList = await getStudentList(ddb, eventId, classroom);
+
+    let studentList = await getStudentList(eventId, classroom);
 
       debug(`Request metric(s) for event id ${eventId}`);
 
       return success(studentList);
-    }
+    // }
   } catch (err) {
     console.error("Unmanaged error", err);
     return error({ code: "data" });
   }
 };
 
-async function getStudentList(ddb, eventId, classroom) {
+async function getStudentList(eventId, classroom) {
   debug(`Key used ${eventId}`);
   debug(`Key used ${typeof eventId}`);
+
+  let ddb = new AWS.DynamoDB({ apiVersion: "2012-10-08" });
 
   let params = {
     Key: {
