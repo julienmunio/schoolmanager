@@ -36,7 +36,7 @@ resource "aws_lambda_function" "collect" {
       REGION      = var.region
       TABLE       = aws_dynamodb_table.classroom.name
       NAMESPACE   = var.cloudwatch_namespace
-      # IP_ADDRESS   = var.ip_address
+      IP_ADDRESS   = var.ip_address
     }
   }
 }
