@@ -17,9 +17,7 @@ exports.handler = async (req, context) => {
   try {
     if (req.headers["X-Forwarded-For"] === IP_ADDRESS) {
       let eventId = "0211540K";
-      let classroom = "a";
-
-      let studentList = await getStudentList(eventId, classroom);
+      let studentList = await getStudentList(eventId);
 
       debug(`Request metric(s) for event id ${eventId}`);
 
@@ -46,7 +44,7 @@ async function getStudentList(eventId, classroom) {
     // Query
     // ExpressionAttributeValues: expression,
     ExpressionAttributeValues: { ":v1": { S: eventId } },
-    KeyConditionExpression: `${partitionKey} = ${expressionAttribute}`,
+    KeyConditionExpression: `${partitionKey} = :v1`,
     TableName: TABLE,
     Limit: 10, // page size
     ScanIndexForward: true, // put as false to reverse order
