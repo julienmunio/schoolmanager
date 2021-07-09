@@ -74,6 +74,7 @@ resource "aws_iam_policy" "lambda_collect" {
         "logs:CreateLogStream",
         "logs:PutLogEvents",
         "dynamodb:GetItem",
+        "dynamodb:Query",
         "dynamodb:BatchGetItem",
         "dynamodb:UpdateItem"
       ],

@@ -19,11 +19,11 @@ exports.handler = async (req, context) => {
       let eventId = "0211540K";
       let classroom = "a";
 
-    let studentList = await getStudentList(eventId, classroom);
+      let studentList = await getStudentList(eventId, classroom);
 
       debug(`Request metric(s) for event id ${eventId}`);
 
-      return success(studentList);
+      return success(studentList.Items);
     }
   } catch (err) {
     console.error("Unmanaged error", err);
@@ -37,14 +37,22 @@ async function getStudentList(eventId, classroom) {
 
   let ddb = new AWS.DynamoDB({ apiVersion: "2012-10-08" });
 
+  let expressionAttribute = ":v1";
+  let partitionKey = "school";
+  let expression = {};
+  expression[expressionAttribute] = { S: eventId };
+
   let params = {
-    Key: {
-      school: { S: eventId },
-      classroom: { S: classroom },
-    },
+    // Query
+    // ExpressionAttributeValues: expression,
+    ExpressionAttributeValues: { ":v1": { S: eventId } },
+    KeyConditionExpression: `${partitionKey} = ${expressionAttribute}`,
     TableName: TABLE,
+    Limit: 10, // page size
+    ScanIndexForward: true, // put as false to reverse order
+    ...(false && { ExclusiveStartKey: LastEvaluatedKey }) // token for pagination
   };
-  return await ddb.getItem(params).promise();
+  return await ddb.query(params).promise();
 }
 
 /**
